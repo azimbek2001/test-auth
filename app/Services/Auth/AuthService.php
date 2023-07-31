@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services\Auth;
 
 use App\Http\Dto\Auth\BaseAuthLoginDto;
+use App\Http\Resources\UserResource;
 use App\Models\User\User;
 use App\Repositories\User\IUserRepository;
 use App\Services\Service;
@@ -40,7 +41,7 @@ class AuthService extends Service implements IAuthService
         $token = $user->createToken('test')->plainTextToken;
 
         return $this->createResponse([
-            'user' => $user,
+            'user' => new UserResource($user),
             'token' => $token,
         ]);
     }

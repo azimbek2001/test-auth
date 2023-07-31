@@ -6,18 +6,23 @@ namespace App\Models\User;
 use App\Http\Dto\Auth\BaseAuthLoginDto;
 use App\Http\Dto\User\BaseCreateUserDto;
 use App\Models\BaseAuthenticatable;
+use App\Models\Organization\Organization;
 use App\Utils\Columns\UserColumns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
+ * @property int $id
  * @property string $email
  * @property string password
  * @property int $organization_id
  *
  * @property UserFullName $full_name
+ * @property Organization $organization
  */
 class User extends BaseAuthenticatable
 {
@@ -88,7 +93,10 @@ class User extends BaseAuthenticatable
         return $user;
     }
 
-
+    /**
+     * @param BaseCreateUserDto $userDto
+     * @return void
+     */
     private function setFullName(BaseCreateUserDto $userDto): void
     {
         $this->full_name = new UserFullName($userDto->first_name, $userDto->last_name, $userDto->middle_name);
@@ -113,5 +121,13 @@ class User extends BaseAuthenticatable
     {
         $fullName = json_decode($value);
         return new UserFullName($fullName->first_name, $fullName->last_name, $fullName->middle_name);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 }

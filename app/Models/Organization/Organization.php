@@ -7,6 +7,11 @@ use App\Models\BaseModel;
 use App\Utils\Columns\OrganizationColumns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property int $id
+ * @property string $inn
+ * @property string $name
+ */
 class Organization extends BaseModel
 {
     use HasFactory;
